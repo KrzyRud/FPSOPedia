@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% set active_page = 'dashboard' %}
+
+{%  block content %}
+
+    <form action="" method="post" class="" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="container card border-success col-md-12 col-lg-10 col-xl-6 shadow-lg p-3 mb-5 bg-body rounded">
+        
+            <div class="row card-body  ">
+                <div class="">
+                    <div class="mb-3 card-header text-center text-success ">
+                        <h3 >UPDATE YOUR DATA</h3>
+                     </div>
+
+                    <div class="row mb-3">
+                        {{ form.username.label(class="col-lg-2 col-form-label") }}
+                        <div class="col-lg-10">
+                            {{ form.username(size=32, class="form-control", placeholder='username') }}
+                        </div>
+                        {% for error in form.username.errors %}
+                            <p style="color:red"><em>{{ error }}</em></p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="row mb-3">
+                        {{ form.name.label(class="col-lg-2 col-form-label") }}
+                        <div class="col-lg-10">
+                            {{ form.name(size=24, class="form-control", placeholder='Name') }}
+                        </div>
+                        {% for error in form.name.errors %}
+                            <span style="color:red"><em>{{ error }}</em></span>
+                        {% endfor %}
+                    </div>
+        
+                    <div class="row mb-3">
+                        {{ form.surname.label(class="col-lg-2 col-form-label") }}
+                        <div class="col-lg-10">
+                            {{ form.surname(size=32, class="form-control", placeholder='Surname') }}
+                        </div>
+                        {% for error in form.surname.errors %}
+                            <p style="color:red"><em>{{ error }}</em></p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="row mb-3">
+                        {{ form.email.label(class="col-lg-2 col-form-label") }}
+                        <div class="col-lg-10">
+                            {{ form.email(size=32, class="form-control", type="email", placeholder='Email') }}
+                        </div>
+                        {% for error in form.email.errors %}
+                            <p style="color:red"><em>{{ error }}</em></p>
+                        {% endfor %}
+                    </div>
+                    
+
+                    <div class="row">
+                        <div class="mb-4 text-center ">
+                        <a href="{{ url_for('dashboard', username=user.username) }}" class="btn btn-outline-success me-3">Close</a>
+                         {{ form.submit(class="btn btn-outline-secondary") }}
+                         <a href="{{ url_for('delete_User_warning', id=user.id) }} " class="btn btn-outline-danger ms-3">Delete Profile</a> 
+                        </div>
+                    </div>
+                    
+ 
+                </div>
+            </div>
+        </div>
+    </form>
+ 
+{% endblock %}

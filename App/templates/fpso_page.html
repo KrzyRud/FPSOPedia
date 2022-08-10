@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{%  block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible d-flex align-items-center" role="alert">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </symbol>
+                        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                        </symbol>
+                        <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </symbol>
+                    </svg>
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                    
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>   
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+<div class="card text-center shadow p-3 mb-5 bg-body rounded">
+  <div class="card-header ">
+    <h2 class="display-6 mb-4">{{ fpso.fpso_name }}</h2>
+    <figcaption class="blockquote-footer">
+    Updated by: <cite title="Source Title"> {{ fpso.fpso_owner }}</cite>
+  </figcaption>
+  </div>
+
+  <div class="row">
+    <div class="card-body col-12 col-lg-3">
+        <h4 class="card-title p-3 mb-2 bg-secondary text-white">General Information</h4>
+        <hr>
+        <p class="card-text text-start"><b>Basin: </b>{{ fpso.fpso_basin }}</p>
+        <p class="card-text text-start"><b>Position: </b></p>
+        <p class="card-text text-start ms-5"><b>Lat: </b>{{ fpso.fpso_psn_lat_deg }}&#176 {{ fpso.fpso_psn_lat_min }}' {{ fpso.fpso_psn_lat_sec }}" {{ fpso.fpso_psn_lat_NS }}</p>
+        <p class="card-text text-start ms-5"><b>Long: </b>{{ fpso.fpso_psn_long_deg }}&#176 {{ fpso.fpso_psn_long_min }}' {{ fpso.fpso_psn_long_sec }}" {{ fpso.fpso_psn_long_WE }}</p>
+        <p class="card-text text-start"><b>Heading: </b>{{ fpso.fpso_hdg }} &#176</p>
+        <p class="card-text text-start"><b>VHF Channel: </b>{{ fpso.fpso_vhf }}</p>
+        <p class="card-text text-start"><b>Contact details: </b></p>
+        <p class="card-text text-start"><b>Email 1: </b>{{ " - " if fpso.fpso_email_1 == 'fpso@example.com' else fpso.fpso_email_1 }}</p>
+        <p class="card-text text-start"><b>Email 2: </b>{{ " - " if fpso.fpso_email_2 == 'fpso@example.com' else fpso.fpso_email_2 }}</p>
+        <p class="card-text text-start"><b>Email 3: </b>{{ " - " if fpso.fpso_email_3 == 'fpso@example.com' else fpso.fpso_email_3 }}</p>
+        <p class="card-text text-start"><b>Email 4: </b>{{ " - " if fpso.fpso_email_4 == 'fpso@example.com' else fpso.fpso_email_4 }}</p>
+        <p class="card-text text-start"><b>Email 5: </b>{{ " - " if fpso.fpso_email_5 == 'fpso@example.com' else fpso.fpso_email_5 }}</p>
+
+    
+    </div>
+  
+
+  
+    <div class="card-body col-12 col-lg-3 ">
+        <h4 class="card-title p-3 mb-2 bg-secondary text-white">PRS Fwd</h4>
+        <hr>
+       
+        <p class="card-text text-center"><b>DARPS ID: </b>{{ fpso.darps_ID_fwd }}</p>
+        <div class="row">
+            <p class="card-text col-6"><b>TDME 1: </b>{{ fpso.darps_1_tdma_fwd }}</p>
+            <p class="card-text col-6"><b>TDME 2: </b>{{ fpso.darps_2_tdma_fwd }}</p>
+        </div>
+        <div class="row">
+            <p class="card-text col-6"><b>Time Slot: </b>{{ fpso.darps_1_ts_fwd }}</p>
+            <p class="card-text col-6"><b>Time Slot: </b>{{ fpso.darps_2_ts_fwd }}</p>
+        </div>
+        
+        <p class="card-text text-center"><b>DARPS Info: </b></p>
+        <p class="card-text text-center">{{ fpso.darps_info_fwd }}</p>
+        <br>
+        <p class="card-text text-center"><b>Artemis/XPR: </b></p>
+        <div class="row">
+            <p class="card-text col-6"><b>Address Code: </b></p>
+            <p class="card-text col-6">{{ fpso.artemis_address_code_fwd }}</p>
+            <p class="card-text col-6"><b>Freq Pair: </b></p>
+            <p class="card-text col-6"> {{ fpso.artemis_freq_pair_fwd }}</p>
+        </div>
+        
+        <p class="card-text text-center"><b>Artemis Info: </b></p>
+        <p class="card-text text-center">{{ fpso.artemis_info_fwd }}</p>
+        <br>
+        <p class="card-text text-center"><b>Fanbeam Info: </b></p>
+        <p class="card-text text-center">{{ fpso.fanbeam_info_fwd }}</p>
+        <br>
+        <p class="card-text text-center"><b>Radius Info: </b></p>
+        <p class="card-text text-center">{{ fpso.radius_info_fwd }}</p>
+        
+    </div>
+    <div class="card-body col-12 col-lg-3">
+        <h4 class="card-title p-3 mb-2 bg-secondary text-white">PRS Aft</h4>
+        <hr>
+        <p class="card-text text-center"><b>DARPS ID: </b>{{ fpso.darps_ID_aft }}</p>
+        <div class="row">
+            <p class="card-text col-6"><b>TDME 1: </b>{{ fpso.darps_1_tdma_aft }}</p>
+            <p class="card-text col-6"><b>TDME 2: </b>{{ fpso.darps_2_tdma_aft }}</p>
+        </div>
+        <div class="row">
+            <p class="card-text col-6"><b>Time Slot: </b>{{ fpso.darps_1_ts_aft }}</p>
+            <p class="card-text col-6"><b>Time Slot: </b>{{ fpso.darps_2_ts_aft }}</p>
+        </div>
+        
+        <p class="card-text text-center"><b>DARPS Info: </b></p>
+        <p class="card-text text-center">{{ fpso.darps_info_aft }}</p>
+        <br>
+        <p class="card-text text-center"><b>Artemis/XPR: </b></p>
+        <div class="row">
+            <p class="card-text col-6"><b>Address Code: </b></p>
+            <p class="card-text col-6">{{ fpso.artemis_address_code_aft }}</p>
+            <p class="card-text col-6"><b>Freq Pair: </b></p>
+            <p class="card-text col-6">{{ fpso.artemis_freq_pair_aft }}</p>
+        </div>
+        
+        <p class="card-text text-center"><b>Artemis Info: </b></p>
+        <p class="card-text text-center">{{ fpso.artemis_info_aft }}</p>
+        <br>
+        <p class="card-text text-center"><b>Fanbeam Info: </b></p>
+        <p class="card-text text-center">{{ fpso.fanbeam_info_aft }}</p>
+        <br>
+        <p class="card-text text-center"><b>Radius Info: </b></p>
+        <p class="card-text text-center">{{ fpso.radius_info_aft }}</p>
+        
+    </div>
+
+
+  
+    <div class="card-body col-12 col-lg-3">
+        <h4 class="card-title p-3 mb-2 bg-secondary text-white">Cargo</h4>
+        <hr>
+        <p class="card-text text-start"><b>Cargo Name: </b>{{ fpso.cargo_name }}</p>
+        <p class="card-text text-start"><b>Discharging rate: </b>{{ fpso.fpso_disch_rate }} cbm/hr</p>
+        <p class="card-text text-start"><b>Cargo API: </b>{{ fpso.cargo_API }}</p>
+        <p class="card-text text-start"><b>Cargo dens @ 20 &#176C: </b>{{ fpso.cargo_dens }}</p>
+        <p class="card-text text-start"><b>Cargo temp: </b>{{ fpso.cargo_temp }}&#176C</p>
+         <p class="card-text text-start"><b>Cargo BSW: </b>{{ fpso.cargo_bsw }}&#37</p>
+        <br>
+        <p class="card-text text-start"><b>Fwd Station: </b></p>
+        <p class="card-text text-start"><b>Qty of Hose Flushing: </b>{{ fpso.cargo_line_displ_fwd }} cbm</p>
+        <p class="card-text text-start"><b>Qty of Line displacement: </b>{{ fpso.cargo_Hose_Flush_fwd }} cbm</p>
+        <br>
+        <p class="card-text text-start"><b>Aft Station: </b></p>
+        <p class="card-text text-start"><b>Qty of Hose Flushing: </b>{{ fpso.cargo_line_displ_aft }} cbm</p>
+        <p class="card-text text-start"><b>Qty of Line displacement: </b>{{ fpso.cargo_Hose_Flush_aft }} cbm</p>
+        <br>
+        <p class="card-text text-start"><b>Cargo Info: </b></p>
+        <p class="card-text text-start">{{ fpso.cargo_info }}</p>
+
+    </div>
+  </div>
+  <hr>
+<!-- GENERAL REMARKS -->
+<p class="card-text text-start"><b>General Remarks: </b></p>
+<p class="card-text text-start">{{ fpso.fpso_remarks }} </p>
+<hr>
+
+
+<!-- BUTTONS -->
+
+  <div class="row">
+    <div class="card-body">
+        <a href="{{ url_for('index') }}" class="btn btn-outline-success me-3 mb-3">Close</a>
+        <a href="{{ url_for('edit_fpso', id=fpso.id) }}" class="btn btn-outline-secondary {{ '' if current_user.is_authenticated else 'disabled'}} me-3 mb-3">Edit</a>
+        <a href="{{ url_for('delete_warning', id=fpso.id) }}" class="btn btn-outline-danger {{ '' if current_user.is_authenticated else 'disabled'}} me-3 mb-3">Delete</a>
+        {% if current_user.is_authenticated %}
+            {% if not current_user.is_favorite(fpso) %}
+                <form action="{{ url_for('add_to_favorite', id=fpso.id) }}", method="post">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit(value='Add to Favorites', class="btn btn-outline-warning {{ '' if current_user.is_authenticated else 'disabled'}} me-3 mb-3") }}
+                </form>
+            {% else %}
+                <form action="{{ url_for('remove_from_favorite', id=fpso.id) }}", method="post">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit(value='Remove from Favorites', class="btn btn-warning {{ '' if current_user.is_authenticated else 'disabled'}} me-3 mb-3") }}
+                </form>
+            {% endif %}
+        {% endif %}        
+    </div>
+    <p class="fw-lighter">{{ " " if current_user.is_authenticated else "You need to be logged in user in order to edit or delete the FPSO" }}</p>
+  </div>
+  
+  <div class="card-footer text-muted">
+    Updated: {{ moment(fpso.timestamp).fromNow(refresh=True) }}
+  </div>
+</div>
+
+{% endblock %}

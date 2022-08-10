@@ -1,0 +1,19 @@
+{% set logo = fpso.fpso_img_name %}
+
+<div class="card border-dark mb-3 col-12 col-lg-3 shadow p-3 bg-body rounded">
+  <div class="card-header ">
+    <h4>{{ fpso.fpso_name }}</h4>
+  </div>
+    <div class="row">
+      <img src="{{ url_for('static', filename='img/{}.jpg'.format(logo)) }}" class="rounded float-start" alt="FPSO Image">
+      <div class="col">
+        <div class="card-body text-dark"> 
+        <p class="card-text"><b>Updated on:</b> <em>{{ moment(fpso.timestamp).fromNow(refresh=True) }}</em></p>
+        <p class="card-text"><b>Updated by:</b>  <em>{{ fpso.fpso_owner }}</em></p>
+        <a href="{{url_for('fpso_page', id=fpso.id) }}" class="stretched-link"></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+

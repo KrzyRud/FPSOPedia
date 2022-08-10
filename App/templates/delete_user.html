@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{%  block content %}
+   
+   
+        <div class="container card border-danger mb-3 col-10 col-md-4 shadow-lg p-3 mb-5 bg-body rounded">
+            <div class="row card-body   ">
+                <div class="">
+                    <div class="mb-3 card-header text-danger text-center ">
+                        <h3 >WARNING !!! </h3>
+                     </div>
+
+                    <div class="mb-3">
+                        <h4>Do You Realy Want To Delete {{ user.username }} profile ???</h4>
+                    </div>
+                    <div class="row">
+                    <div class="card-body">
+                        <a href="{{ url_for('dashboard', username=user.username) }}" class="btn btn-outline-success me-3 mb-3">Close</a>
+                        <a href="{{ url_for('delete_user', id=user.id) }}" class="btn btn-outline-danger me-3 mb-3">Delete</a>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    
+ 
+{% endblock %}
