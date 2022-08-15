@@ -1,9 +1,12 @@
 from email.policy import default
 from enum import unique
-from App import db, login
+from App import db, login, app
 from flask_login import UserMixin
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from time import time
+import jwt
+
 
 # Setting the logged user for Flask Login
 @login.user_loader
@@ -52,8 +55,26 @@ class User (db.Model, UserMixin):
     # Setting up the function which returns followed posts
     def favorite_fpso(self):
         favorite_fpsos = Fpso.query.join(favorite, (favorite.c.fpso_id==Fpso.id)).filter(favorite.c.user_id==self.id).order_by(Fpso.fpso_name)
-
         return favorite_fpsos
+
+    # Reset password function
+    def get_reset_password_token(self, expire_in=600):
+        return jwt.encode(
+            {'reset_password': self.id, 
+            'exp': time() + expire_in},
+            app.config['SECRET_KEY'], 
+            algorithm='HS256')
+
+    @staticmethod
+    def verify_reset_password_token(token):
+        try:
+            id=jwt.decode(token, 
+            app.config['SECRET_KEY'], 
+            algorithms=['HS256']
+            )['reset_password']
+        except:
+            return
+        return User.query.get(id)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)

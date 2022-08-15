@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_moment import Moment
+from flask_mail import Mail
 
 from config import Config
 
@@ -21,5 +22,8 @@ login.login_view = "login"
 
 # Setting up the flask-moment
 moment = Moment(app)
+
+# Setting up the Mail service
+mail = Mail(app)
 
 from App import routes, models, forms, errors
