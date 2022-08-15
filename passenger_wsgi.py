@@ -1,3 +1,3 @@
 import sys, os
 sys.path.append(os.getcwd())
-from App import app as application
+from fpsopedia import app as application
