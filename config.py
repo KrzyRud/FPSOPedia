@@ -16,7 +16,7 @@ class Config(object):
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
     MAIL_USERNAME = 'info@fpsopedia.com'
-    MAIL_PASSWORD = 'SklepfpsopediaN@v11'
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD_1')
     MAIL_DEFAULT_SENDER = 'info@fpsopedia.com'
     MAIL_MAX_EMAILS = None
     MAIL_SUPPRESS_SEND = False
