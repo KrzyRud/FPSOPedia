@@ -11,13 +11,13 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATOR = False
 
     # SETTING THE EMAIL
-    MAIL_SERVER = os.environ.get('MAIL_SERVER_1')
+    MAIL_SERVER = 'fpsopedia.atthost24.pl'
     MAIL_PORT = 465
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME_1')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD_1')
-    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_USERNAME_1')
+    MAIL_USERNAME = 'info@fpsopedia.com'
+    MAIL_PASSWORD = 'SklepfpsopediaN@v11'
+    MAIL_DEFAULT_SENDER = 'info@fpsopedia.com'
     MAIL_MAX_EMAILS = None
     MAIL_SUPPRESS_SEND = False
     MAIL_ASCII_ATTACHMENTS = False
