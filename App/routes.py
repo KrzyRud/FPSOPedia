@@ -4,7 +4,7 @@ from email.message import Message
 from unicodedata import name
 from flask import redirect, render_template, url_for, flash, request
 
-from turtle import rt, title
+# from turtle import rt, title
 
 from flask_login import current_user, login_required, login_user, logout_user
 
