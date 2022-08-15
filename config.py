@@ -6,7 +6,7 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or "JebacPIS"
     
     # SETTING UP THE DATABASE
-    SQLALCHEMY_DATABASE_URI = 'postgres://tmxpoqdhixpwse:3fd312a8ee455ef8b14a684b8e2f576efcd1b9b4b87dd76c4947db9ced87a755@ec2-44-205-112-253.compute-1.amazonaws.com:5432/degj1vngc2c20l'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://tmxpoqdhixpwse:3fd312a8ee455ef8b14a684b8e2f576efcd1b9b4b87dd76c4947db9ced87a755@ec2-44-205-112-253.compute-1.amazonaws.com:5432/degj1vngc2c20l'
     #   or 'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATOR = False
 
