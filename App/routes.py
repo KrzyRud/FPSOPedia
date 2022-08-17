@@ -127,7 +127,7 @@ def delete_fpso(id):
 
 
 # DELETE USER WARNING PAGE
-@app.route('/delete_user_warning<int:id>')
+@app.route('/delete_user_warning/<int:id>')
 @login_required
 def delete_User_warning(id):
      user_to_delete = User.query.get_or_404(id)
