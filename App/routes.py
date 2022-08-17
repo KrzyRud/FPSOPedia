@@ -15,6 +15,8 @@ from App.forms import Edit_User_Form, EmptyForm, LoginForm, RegisterForm, Add_FP
 from App.models import User, Fpso
 from App.email import send_password_reset_email
 
+import os
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
@@ -88,9 +90,16 @@ def remove_from_favorite(id):
 @app.route('/user_dashboard/<username>')
 @login_required
 def dashboard(username):
+    admin = os.environ.get("ADMIN")
     user = User.query.filter_by(username = username).first_or_404()
     followed_fpso = user.favorite_fpso()
-    return render_template('dashboard.html', title='User Dashboard', user=user, fpsos=followed_fpso)
+    return render_template('dashboard.html', title='User Dashboard', user=user, fpsos=followed_fpso, admin=admin)
+
+# ALL USERS
+@app.route('/all_users', methods=['GET', 'POST'])
+def all_users():
+    users = User.query.order_by(User.user_since).all()
+    return render_template('all_users.html', title = 'All Users', users=users)
 
 # DELETE WARNING PAGE
 @app.route('/delete_warning<int:id>')
@@ -124,6 +133,7 @@ def delete_User_warning(id):
      user_to_delete = User.query.get_or_404(id)
      return render_template('delete_user.html', title='Delete_User', user=user_to_delete)
 
+# DELETE USER
 @app.route('/delete_user/<int:id>')
 def delete_user(id):
     user_to_delete = User.query.get_or_404(id)
@@ -145,6 +155,7 @@ def edit_fpso(id):
 
     form = FpsoDetailForm(email_1 = 'fpso@example.com', email_2='fpso@example.com', email_3='fpso@example.com', email_4='fpso@example.com', email_5='fpso@example.com')
     fpso_to_edit = Fpso.query.get_or_404(id)
+    admin = os.environ.get("ADMIN")
 
     if fpso_to_edit == None:
         flash('There no FPSO with such a name!!!')
@@ -262,7 +273,7 @@ def edit_fpso(id):
         form.fanbeam_info_aft.data = fpso_to_edit.fanbeam_info_aft
         form.radius_info_aft.data = fpso_to_edit.radius_info_aft
 
-    return render_template('edit_fpso.html', title='Edit FPSO', fpso = fpso_to_edit, form = form)
+    return render_template('edit_fpso.html', title='Edit FPSO', fpso = fpso_to_edit, form = form, admin=admin)
 
 # EDIT USER
 @app.route('/edit_user/<username>', methods=['GET', 'POST'])

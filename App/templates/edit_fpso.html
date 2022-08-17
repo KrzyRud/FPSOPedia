@@ -70,7 +70,7 @@
                   {% endfor %}
                 </div>
 
-                {% if current_user.username == 'navii22' %}
+                {% if current_user.username == admin %}
                   <div class="mb-3">
                     {{ form.img_name.label(class="form-label") }} 
                     {{ form.img_name(size=64,class="form-control") }} 
@@ -558,7 +558,8 @@
                     {{ form.submit(value="Update", class="btn btn-outline-secondary") }}
                 </div>
                 <div class="mb-3 text-center">
-                       <a href="{{ url_for('fpso_page', id=fpso.id) }}" class="btn btn-outline-success">Close</a>
+                  <a href="{{ url_for('delete_warning', id=fpso.id) }}" class="btn btn-outline-danger me-3">Delete</a>
+                  <a href="{{ url_for('fpso_page', id=fpso.id) }}" class="btn btn-outline-success">Close</a>
                 </div>
              
   

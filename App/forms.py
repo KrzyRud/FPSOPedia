@@ -21,7 +21,8 @@ class LoginForm(FlaskForm):
 class RegisterForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     surname = StringField('Surname', validators=[DataRequired()])
-    username = StringField('Username', validators=[DataRequired(), Regexp('^[A-Za-a][A-Za-z0-9_.]*$', 0, 'Username must have only letters, numbers, dots or undersores)')])
+    username = StringField('Username', validators=[DataRequired()])
+    # , Regexp('^[A-Za-a][A-Za-z0-9_.]*$', 0, 'Username must have only letters, numbers, dots or undersores)')])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     password_2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])

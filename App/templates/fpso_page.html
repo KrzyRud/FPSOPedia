@@ -163,7 +163,7 @@
     <div class="card-body">
         <a href="{{ url_for('index') }}" class="btn btn-outline-success me-3 mb-3">Close</a>
         <a href="{{ url_for('edit_fpso', id=fpso.id) }}" class="btn btn-outline-secondary {{ '' if current_user.is_authenticated else 'disabled'}} me-3 mb-3">Edit</a>
-        <a href="{{ url_for('delete_warning', id=fpso.id) }}" class="btn btn-outline-danger {{ '' if current_user.is_authenticated else 'disabled'}} me-3 mb-3">Delete</a>
+        
         {% if current_user.is_authenticated %}
             {% if not current_user.is_favorite(fpso) %}
                 <form action="{{ url_for('add_to_favorite', id=fpso.id) }}", method="post">
@@ -178,7 +178,7 @@
             {% endif %}
         {% endif %}        
     </div>
-    <p class="fw-lighter">{{ " " if current_user.is_authenticated else "You need to be logged in user in order to edit or delete the FPSO" }}</p>
+    <p class="fw-lighter">{{ " " if current_user.is_authenticated else "You need to be logged in user in order to edit the FPSO" }}</p>
   </div>
   
   <div class="card-footer text-muted">
