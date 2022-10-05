@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
-from pyparsing import Regex
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField, IntegerField, FloatField
-from wtforms.validators import DataRequired, EqualTo, Email, ValidationError, Length, Regexp
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectField
+from wtforms.validators import DataRequired, EqualTo, Email, ValidationError, Length
 
 from App.models import User
 
@@ -87,11 +86,11 @@ class FpsoDetailForm(FlaskForm):
     hdg = StringField('Heading')
     disch_rate = StringField('Discharging Rate')
     vhf = StringField('Operational Channel')
-    email_1 = StringField('Emeil 1', validators=[Email()])
-    email_2 = StringField('Emeil 2', validators=[Email()])
-    email_3 = StringField('Emeil 3', validators=[Email()])
-    email_4 = StringField('Emeil 4', validators=[Email()])
-    email_5 = StringField('Emeil 5', validators=[Email()])
+    email_1 = StringField('Email 1', validators=[Email()])
+    email_2 = StringField('Email 2', validators=[Email()])
+    email_3 = StringField('Email 3', validators=[Email()])
+    email_4 = StringField('Email 4', validators=[Email()])
+    email_5 = StringField('Email 5', validators=[Email()])
     # CARGO
     cargo_name = StringField("Cargo name", validators=[DataRequired()])
     cargo_api = StringField("API")

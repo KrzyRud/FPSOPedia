@@ -163,7 +163,12 @@ def edit_fpso(id):
 
     if form.validate_on_submit():
         fpso_to_edit.fpso_owner = current_user.username
-        fpso_to_edit.fpso_img_name = form.img_name.data
+        
+        if current_user.username == admin:
+            fpso_to_edit.fpso_img_name = form.img_name.data
+        else:
+            fpso_to_edit.fpso_img_name = fpso_to_edit.fpso_img_name
+
         fpso_to_edit.fpso_name = form.name.data
         fpso_to_edit.fpso_remarks = form.fpso_details.data
         fpso_to_edit.timestamp = datetime.utcnow()
@@ -390,7 +395,7 @@ def login():
         # use next arg to return ulogged user to the requested page after succesfull loggin
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')
+            next_page = url_for('dashboard', username=user.username)
         return redirect(url_for('dashboard', username=user.username))
     return render_template('login.html', form=form, title='Login')
 
@@ -446,6 +451,6 @@ def register():
         new_user.set_password(form.password.data)
         db.session.add(new_user)
         db.session.commit()
-        flash("Congratulation, You are now  the registered User. Please Login!!!")
+        flash("Congratulation, You are now the registered User. Please Login!!!")
         return redirect(url_for('login'))
     return render_template('register.html', form=form, title='Register')
