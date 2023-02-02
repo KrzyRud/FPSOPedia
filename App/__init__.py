@@ -3,7 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_moment import Moment
-from flask_mail import Mail
+# from flask_mail import Mail
+from flask_mail_sendgrid import MailSendGrid
 
 from config import Config
 
@@ -24,6 +25,9 @@ login.login_view = "login"
 moment = Moment(app)
 
 # Setting up the Mail service
-mail = Mail(app)
+mail = MailSendGrid(app)
 
 from App import routes, models, forms, errors
+
+if __name__ == "__main__":
+    app.run()

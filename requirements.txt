@@ -6,6 +6,7 @@ email-validator==1.2.1
 Flask==2.1.2
 Flask-Login==0.6.1
 Flask-Mail==0.9.1
+Flask-Mail-SendGrid==0.3
 Flask-Migrate==3.1.0
 Flask-Moment==1.0.3
 Flask-SQLAlchemy==2.5.1
@@ -23,7 +24,9 @@ psycopg2-binary==2.9.3
 PyJWT==2.4.0
 pyparsing==3.0.9
 python-dotenv==0.20.0
+python-http-client==3.3.7
 SQLAlchemy==1.4.39
+starkbank-ecdsa==2.2.0
 Werkzeug==2.1.2
 WTForms==3.0.1
 zipp==3.8.0

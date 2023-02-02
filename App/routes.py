@@ -3,13 +3,8 @@ from datetime import datetime
 from email.message import Message
 from unicodedata import name
 from flask import redirect, render_template, url_for, flash, request
-
-# from turtle import rt, title
-
 from flask_login import current_user, login_required, login_user, logout_user
-
 from werkzeug.urls import url_parse
-
 from App import app, db
 from App.forms import Edit_User_Form, EmptyForm, LoginForm, RegisterForm, Add_FPSOForm, FpsoDetailForm, SearchForm, ResetPasswordRequestForm, ResetPasswordForm
 from App.models import User, Fpso
@@ -34,6 +29,10 @@ def search(fpso):
     search_FPSO = Fpso.query.filter(Fpso.fpso_name.like('%' + fpso + '%')).all()
     return render_template('search.html', fpso=search_FPSO, form=form, fp=fpso)
 
+# ABOUT
+@app.route('/about')
+def about():
+    return render_template('about.html', title = "About")
 
 # ADD NEW FPSO
 @app.route('/addfpso', methods=['GET', 'POST'])
@@ -90,7 +89,7 @@ def remove_from_favorite(id):
 @app.route('/user_dashboard/<username>')
 @login_required
 def dashboard(username):
-    admin = os.environ.get("ADMIN")
+    admin = "Admin"
     user = User.query.filter_by(username = username).first_or_404()
     followed_fpso = user.favorite_fpso()
     return render_template('dashboard.html', title='User Dashboard', user=user, fpsos=followed_fpso, admin=admin)
@@ -155,7 +154,7 @@ def edit_fpso(id):
 
     form = FpsoDetailForm(email_1 = 'fpso@example.com', email_2='fpso@example.com', email_3='fpso@example.com', email_4='fpso@example.com', email_5='fpso@example.com')
     fpso_to_edit = Fpso.query.get_or_404(id)
-    admin = os.environ.get("ADMIN")
+    admin = "Admin"
 
     if fpso_to_edit == None:
         flash('There no FPSO with such a name!!!')
@@ -454,3 +453,6 @@ def register():
         flash("Congratulation, You are now the registered User. Please Login!!!")
         return redirect(url_for('login'))
     return render_template('register.html', form=form, title='Register')
+
+if __name__ == "__main__":
+    app.run()
