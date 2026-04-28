@@ -73,7 +73,6 @@ class Add_FPSOForm(FlaskForm):
 class FpsoDetailForm(FlaskForm):
     name = StringField("FPSO name", validators=[DataRequired()])
     img_name = StringField("Img Name")
-    fpso_details = TextAreaField("General Info")
     basin = StringField("Basin")
     psn_lat_deg = StringField(" Deg ")
     psn_lat_min = StringField("Min")

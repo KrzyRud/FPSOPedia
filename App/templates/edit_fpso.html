@@ -216,13 +216,6 @@
                         {% endfor %}
                     </div>
 
-                    <div class="mb-3">
-                      {{ form.fpso_details.label(class="form-label") }} 
-                      {{ form.fpso_details(class="form-control", cols=50, rows=6, placeholder='General Info') }} 
-                      {% for error in form.fpso_details.errors %}
-                        <p style="color: red"><em>{{ error }}</em></p>
-                      {% endfor %}
-                  </div>
 
             </div>
         </div>

@@ -170,7 +170,6 @@ def edit_fpso(id):
             fpso_to_edit.fpso_img_name = fpso_to_edit.fpso_img_name
 
         fpso_to_edit.fpso_name = form.name.data
-        fpso_to_edit.fpso_remarks = form.fpso_details.data
         fpso_to_edit.timestamp = datetime.utcnow()
         fpso_to_edit.fpso_basin = form.basin.data
         fpso_to_edit.fpso_psn_lat_deg = form.psn_lat_deg.data
@@ -227,7 +226,6 @@ def edit_fpso(id):
     elif request.method =="GET": 
         form.name.data = fpso_to_edit.fpso_name
         form.img_name.data = fpso_to_edit.fpso_img_name
-        form.fpso_details.data = fpso_to_edit.fpso_remarks
         form.basin.data = fpso_to_edit.fpso_basin
         form.psn_lat_deg.data = fpso_to_edit.fpso_psn_lat_deg
         form.psn_lat_min.data = fpso_to_edit.fpso_psn_lat_min
@@ -327,7 +325,6 @@ def general_details(fpso):
     if form.validate_on_submit():
         fpso_to_update.fpso_name = form.name.data
         fpso_to_update.fpso_img_name = 'default_fpso_card'
-        fpso_to_update.fpso_remarks = form.fpso_details.data
         fpso_to_update.timestamp = datetime.utcnow()
         fpso_to_update.fpso_basin = form.basin.data
         fpso_to_update.fpso_psn_lat_deg = form.psn_lat_deg.data
