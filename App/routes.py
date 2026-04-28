@@ -1,14 +1,14 @@
-from crypt import methods
 from datetime import datetime
 from email.message import Message
 from unicodedata import name
-from flask import redirect, render_template, url_for, flash, request
+from flask import redirect, render_template, url_for, flash, request, send_from_directory,abort
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.urls import url_parse
 from App import app, db
-from App.forms import Edit_User_Form, EmptyForm, LoginForm, RegisterForm, Add_FPSOForm, FpsoDetailForm, SearchForm, ResetPasswordRequestForm, ResetPasswordForm
-from App.models import User, Fpso
+from App.forms import Edit_User_Form, EmptyForm, LoginForm, RegisterForm, Add_FPSOForm, FpsoDetailForm, SearchForm, ResetPasswordRequestForm, ResetPasswordForm, AddRemarksForm, AddPostsForm
+from App.models import User, Fpso, Remark, Post
 from App.email import send_password_reset_email
+
 
 import os
 
@@ -20,7 +20,8 @@ def index():
         search_for=form.search_for.data
         return redirect(url_for('search', fpso = search_for))
     fpso = Fpso.query.order_by(Fpso.fpso_name).all()
-    return render_template('index.html', title="Home", fpsos=fpso, form=form)
+    posts = Post.query.order_by(Post.id).all()
+    return render_template('index.html', title="Home", fpsos=fpso, form=form, posts=posts)
 
 # SEARCH FOR FPSO
 @app.route('/search/<fpso>', methods=['GET', 'POST'])
@@ -63,7 +64,7 @@ def add_to_favorite(id):
     if form.validate_on_submit():
         fpso_to_add = Fpso.query.filter_by(id=id).first()
         if fpso_to_add is None:
-            flash('FPSO {} not found'.format(fpso_to_add.fpso_name))
+            flash('FPSO not found')
             return redirect(url_for('index'))
         current_user.add_to_favorite(fpso_to_add)
         db.session.commit()
@@ -78,7 +79,7 @@ def remove_from_favorite(id):
     if form.validate_on_submit():
         fpso_to_remove = Fpso.query.filter_by(id=id).first()
         if fpso_to_remove is None:
-            flash('FPSO {} not found'.format(fpso_to_remove.fpso_name))
+            flash('FPSO not found')
             return redirect(url_for('index'))
         current_user.remove_from_favorite(fpso_to_remove)
         db.session.commit()
@@ -101,7 +102,7 @@ def all_users():
     return render_template('all_users.html', title = 'All Users', users=users)
 
 # DELETE WARNING PAGE
-@app.route('/delete_warning<int:id>')
+@app.route('/delete_warning/<int:id>')
 @login_required
 def delete_warning(id):
      fpso_to_delete = Fpso.query.get_or_404(id)
@@ -119,10 +120,9 @@ def delete_fpso(id):
         db.session.commit()
         # qury all FPSOs
         return redirect(url_for('index'))
-    except:
-        flash('Somthing want wrong when deleting the FPSO')
-        # query FPSO
-        return redirect('index')
+    except Exception:
+        flash('Something went wrong when deleting the FPSO')
+        return redirect(url_for('index'))
 
 
 # DELETE USER WARNING PAGE
@@ -134,6 +134,7 @@ def delete_User_warning(id):
 
 # DELETE USER
 @app.route('/delete_user/<int:id>')
+@login_required
 def delete_user(id):
     user_to_delete = User.query.get_or_404(id)
     try:
@@ -141,7 +142,7 @@ def delete_user(id):
         db.session.delete(user_to_delete)
         db.session.commit()
         return redirect(url_for('login'))
-    except:
+    except Exception:
         flash('{} not found!!!'.format(user_to_delete.username))
         db.session.rollback()
         return redirect(url_for('index'))
@@ -156,9 +157,9 @@ def edit_fpso(id):
     fpso_to_edit = Fpso.query.get_or_404(id)
     admin = "Admin"
 
-    if fpso_to_edit == None:
-        flash('There no FPSO with such a name!!!')
-        return redirect('index')
+    if fpso_to_edit is None:
+        flash('There is no FPSO with such a name!')
+        return redirect(url_for('index'))
 
     if form.validate_on_submit():
         fpso_to_edit.fpso_owner = current_user.username
@@ -281,12 +282,15 @@ def edit_fpso(id):
 
 # EDIT USER
 @app.route('/edit_user/<username>', methods=['GET', 'POST'])
+@login_required
 def edit_user(username):
+    if current_user.username != username and current_user.username != 'Admin':
+        abort(403)
     form=Edit_User_Form()
     user_to_edit = User.query.filter_by(username=username).first()
     if user_to_edit is None:
-        flash('{} not found!!!'.format(user_to_edit.username))
-        return('index')
+        flash('{} not found!!!'.format(username))
+        return redirect(url_for('index'))
     if form.validate_on_submit():
         user_to_edit.user_name = form.name.data
         user_to_edit.user_surname = form.surname.data
@@ -308,11 +312,12 @@ def edit_user(username):
 def fpso_page(id):
     form = EmptyForm()
     fpso = Fpso.query.get_or_404(id)
-    return render_template('fpso_page.html', fpso=fpso, title='FPSO_Page', form=form)
+    remarks = Remark.query.order_by(Remark.id).all()
+    return render_template('fpso_page.html', fpso=fpso, title='FPSO_Page', form=form, remarks=remarks)
 
 
 # FPSO DETAILS PAGE
-@app.route('/fpso_details<fpso>', methods=['GET', 'POST'])
+@app.route('/fpso_details/<fpso>', methods=['GET', 'POST'])
 def general_details(fpso):
     form = FpsoDetailForm(email_1 = 'fpso@example.com', email_2='fpso@example.com', email_3='fpso@example.com', email_4='fpso@example.com', email_5='fpso@example.com')
     fpso_to_update = Fpso.query.filter_by(fpso_name=fpso).first()
@@ -402,7 +407,7 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect('index')
+    return redirect(url_for('index'))
 
 # RESET PASSWORD REQUEST
 @app.route('/reset_password_request', methods=['GET', 'POST'])
@@ -439,7 +444,7 @@ def reset_password(token):
 def register():
     form = RegisterForm()
     if current_user.is_authenticated:
-        return redirect('index')
+        return redirect(url_for('index'))
     if form.validate_on_submit():
         new_user = User(
                 user_name = form.name.data,
@@ -453,6 +458,101 @@ def register():
         flash("Congratulation, You are now the registered User. Please Login!!!")
         return redirect(url_for('login'))
     return render_template('register.html', form=form, title='Register')
+
+
+# Add new Remark
+@app.route('/add_remark/<int:id>', methods=['GET', 'POST'])
+def add_remark(id):
+    form = AddRemarksForm()
+    fpsoID = Fpso.query.filter_by(id=id).first()
+    if form.validate_on_submit():
+        remark = Remark(body=form.body.data, fpso=fpsoID)
+        db.session.add(remark)
+        db.session.commit()
+        flash('Remark Added')
+        return redirect(url_for('index'))
+    return render_template('add_remark.html', form=form, title='Add Remark')
+
+# DELETE Remark
+@app.route('/delete_remark/<int:id>')
+def delete_remark(id):
+    remark_to_delete = Remark.query.get_or_404(id)
+    try:
+        db.session.delete(remark_to_delete)
+        db.session.commit()
+        return redirect(url_for('index'))
+    except Exception:
+        flash('Something went wrong when deleting the remark')
+        return redirect(url_for('index'))
+
+# DELETE OLD REMARKS
+@app.route('/delete-old-remarks')
+@login_required
+def delete_old_remarks():
+    if current_user.username != 'Admin':
+        abort(403)
+    remarks = Remark.query.all()
+    today = datetime.now()
+    try:
+        for r in remarks:
+            if today.year - r.timestamp.year >= 1:
+                db.session.delete(r)
+        db.session.commit()
+        flash('Remarks older then 1 year deleted')
+        return redirect(url_for('index'))
+    except Exception:
+        flash('Something went wrong when deleting the remarks')
+        return redirect(url_for('index'))
+    
+
+# Add new Post
+@app.route('/add_post', methods=['GET', 'POST'])
+def add_post():
+    form = AddPostsForm()
+    if form.validate_on_submit():
+        post = Post(body=form.body.data, blog_Title=form.title.data,
+                    user_id=current_user.id if current_user.is_authenticated else None)
+        db.session.add(post)
+        db.session.commit()
+        flash('Post Added')
+        return redirect(url_for('index'))
+    return render_template('add_post.html', form=form, title='Add Post')
+
+# DELETE Post
+@app.route('/delete_post/<int:id>')
+def delete_post(id):
+    post_to_delete = Post.query.get_or_404(id)
+    try:
+        db.session.delete(post_to_delete)
+        db.session.commit()
+        return redirect(url_for('index'))
+    except Exception:
+        flash('Something went wrong when deleting the post')
+        return redirect(url_for('index'))
+
+# BLOG PAGE
+@app.route('/blog')
+def blog():
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return render_template('blog.html', title='Blog', posts=posts)
+
+#DOWNLOAD
+
+@app.route('/download')
+def download():
+    downloads_path = os.path.join(app.root_path, 'static', 'downloads')
+    files = os.listdir(downloads_path) if os.path.isdir(downloads_path) else []
+    return render_template('download.html', title="Download", files=files)
+
+
+@app.route('/download_file/<filename>')
+def download_file(filename):
+    try:
+        return send_from_directory(directory = app.config['FILE_PATH'], path=filename, as_attachment=True)
+    except FileNotFoundError:
+        abort(404)
+
+
 
 if __name__ == "__main__":
     app.run()

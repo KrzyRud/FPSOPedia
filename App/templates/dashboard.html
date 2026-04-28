@@ -27,31 +27,35 @@
     {% endwith %}
 
     
-<div class="container card border-info mb-3 col-10 col-md-6 shadow-lg p-3 mb-5 bg-body rounded">
-  <div class="card-body">
-
-      <div class="mb-3 card-header text-center text-info">
-        <h3 >User's Dashboard - {{ user.user_name }} {{ user.user_surname }} </h3>
-      </div>
-
-      <div class="row">
-
-        <div class="card-text col-12 col-lg-6 mb-3">
-          <img src="{{ url_for('static', filename='img/default-profile.png') }}" alt="">
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-7">
+      <div class="card border-info shadow-lg mb-5 bg-body rounded">
+        <div class="card-header text-center text-info">
+          <h3>User's Dashboard - {{ user.user_name }} {{ user.user_surname }}</h3>
         </div>
+        <div class="card-body">
+          <div class="row align-items-center">
 
-        <div class="col-12 col-lg-6">
-          <h5 class="card-title text-start">Welcome {{ user.username }}</h5>
-          <p class="card-text text-start">Member since: {{ moment(user.user_since).format('LL') }}</p>
-          <p class="card-text text-start">Number of favorite FPSOs: {{ user.favorite.count() }}</p>
-          <p class="card-text text-start">In order to edit your profile <a href="{{ url_for('edit_user', username=user.username) }}" class="card-link link-danger">press here</a> </p>
-          {% if current_user.username == admin %}
-            <p class="card-text text-start">To check all users <a href="{{ url_for('all_users', users=users) }}" class="card-link link-success">press here</a> </p>
-          {% endif %}
+            <div class="col-12 col-sm-4 text-center mb-3 mb-sm-0">
+              <img src="{{ url_for('static', filename='img/default-profile.png') }}" alt="Profile" class="img-fluid rounded" style="max-width: 120px;">
+            </div>
+
+            <div class="col-12 col-sm-8">
+              <h5 class="card-title">Welcome {{ user.username }}</h5>
+              <p class="card-text">Member since: {{ moment(user.user_since).format('LL') }}</p>
+              <p class="card-text">Favorite FPSOs: {{ user.favorite.count() }}</p>
+              <p class="card-text"><a href="{{ url_for('edit_user', username=user.username) }}" class="card-link link-danger">Edit profile</a></p>
+              {% if current_user.username == admin %}
+                <p class="card-text"><a href="{{ url_for('all_users') }}" class="card-link link-success">All users</a></p>
+                <p class="card-text"><a href="{{ url_for('delete_old_remarks') }}" class="card-link link-warning">Delete old remarks</a></p>
+              {% endif %}
+            </div>
+
+          </div>
         </div>
-
       </div>
-
+    </div>
   </div>
 </div>
 

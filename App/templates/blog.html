@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% set active_page = 'blog' %}
+
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible d-flex align-items-center" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        <h4>BLOG</h4>
+        <hr>
+
+        {% if posts %}
+            <div class="row justify-content-start g-3">
+                {% for post in posts %}
+                    <div class="col-12 col-lg-3">
+                        <div class="card border-dark mb-3 shadow p-3 bg-body rounded h-100">
+                            <div class="card-header">
+                                <h4 class="newVersion">{{ post.blog_Title }}</h4>
+                            </div>
+                            <br>
+                            <div class="row px-3">
+                                <p>{{ post.body }}</p>
+                            </div>
+                            <div class="card-body text-dark">
+                                <p class="card-text"><b>Added by:</b>
+                                    <em>{{ post.author.user_name if post.author else 'Unknown' }}</em>
+                                </p>
+                                <p class="card-text text-muted"><small>{{ moment(post.timestamp).format('LL') }}</small></p>
+                            </div>
+                            {% if current_user.is_authenticated and current_user.username == 'Admin' %}
+                            <div>
+                                <a href="{{ url_for('delete_post', id=post.id) }}" class="btn btn-outline-danger me-1 mb-1">Delete</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">No posts yet.</p>
+        {% endif %}
+
+        <hr>
+        <a href="{{ url_for('add_post') }}" class="btn btn-outline-secondary mb-3">Add Post</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% set active_page = "download" %}
+
+{% block content %}
+    <h4>DOWNLOAD SECTION</h4>
+    <hr>
+    <ul>
+        {% for file in files %}
+            <li>
+                <a href="{{ url_for('download_file', filename=file) }}"
+                   class="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+                    {{ file }}
+                </a>
+            </li>
+        {% else %}
+            <li>No files available for download.</li>
+        {% endfor %}
+    </ul>
+    <hr>
+{% endblock %}

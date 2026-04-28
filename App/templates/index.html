@@ -38,6 +38,71 @@
             {{ form.submit(class="btn btn-outline-secondary") }}
         </form>
     </div>
+
+    <hr>
+    <h4><a href="{{ url_for('blog') }}" class="link-dark link-underline-opacity-0 link-underline-opacity-75-hover">BLOG</a></h4>
+    <hr>
+
+
+
+    <div id="carouselExample" class="carousel slide">
+        <div class="carousel-inner">
+            {% if posts %}
+                {% for post in posts %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                    <div class="row justify-content-center">
+                        <div class="card border-dark mb-3 col-12 col-lg-3 shadow p-3 bg-body rounded">
+                            <div class="card-header">
+                                <h4 class="newVersion">{{post.blog_Title}}</h4>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <p>{{post.body}}</p>
+                            </div>
+                            <div class="card-body text-dark">
+                                <p class="card-text"><b>Added by:</b>
+                                    <em>{{ post.author.user_name if post.author else 'Unknown' }}</em>
+                                </p>
+                            </div>
+                            {% if current_user.is_authenticated and current_user.username == 'Admin' %}
+                            <div>
+                                <a href="{{ url_for('delete_post', id=post.id) }}" class="btn btn-outline-danger me-1 mb-1">Delete</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+        <div class="carousel-item {% if not posts %}active{% endif %}">
+            <div class="row justify-content-center">
+                <div class="card border-dark mb-3 col-12 col-lg-3 shadow p-3 bg-body rounded">
+                    <div class="card-header ">
+                        <h4>You Can Suppor This Page At BuyCoffee</h4>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <a href="https://buycoffee.to/naviidevelopment" target="_blank"><img src="https://buycoffee.to/static/img/share/share-button-dark.png" style="width: 234px; height: 61px" alt="Buy me a coffee at buycoffee.to"></a>
+                    </div>
+                </div>
+            </div>   
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <a href="{{ url_for('add_post') }}" class="btn btn-info me-3 mb-3">Add Post</a>
+
+    <hr>
+    <h4> FPSO </h4>
     <hr>
 
     <div class="row">

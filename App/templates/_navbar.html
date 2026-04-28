@@ -26,6 +26,10 @@
         <li class="nav-item">
           <a class="nav-link {{ 'active' if active_page=='index' else ''}}" aria-current="page" href="/">Home</a>
         </li>
+
+        <li class="nav-item">
+          <a class="nav-link {{ 'active' if active_page=='download' else ''}}" aria-current="page" href="{{ url_for('download') }}">Downloads</a>
+        </li>
         
         {% if current_user.is_authenticated %}
           <li class="nav-item">
@@ -36,6 +40,12 @@
             <a class="nav-link {{ 'active' if active_page=='add_fpso' else ''}}" aria-current="page" href="{{ url_for('addfpso') }}">Add New FPSO</a>
           </li>
         {% endif %}
+
+        <li class="nav-item">
+          <a href="https://buycoffee.to/naviidevelopment" target="_blank"><img src="https://buycoffee.to/static/img/share/share-button-dark.png" style="width: 117px; height: 30px" alt="buy me a coffee at buycoffee.to"></a>
+        </li>
+ 
+
       </ul>
       <form class="d-flex text-secondary" role="search">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">

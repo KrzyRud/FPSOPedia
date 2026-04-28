@@ -34,6 +34,7 @@
   </div>
 
   <div class="row">
+
     <div class="card-body col-12 col-lg-3">
         <h4 class="card-title p-3 mb-2 bg-secondary text-white">General Information</h4>
         <hr>
@@ -50,11 +51,8 @@
         <p class="card-text text-start"><b>Email 4: </b>{{ " - " if fpso.fpso_email_4 == 'fpso@example.com' else fpso.fpso_email_4 }}</p>
         <p class="card-text text-start"><b>Email 5: </b>{{ " - " if fpso.fpso_email_5 == 'fpso@example.com' else fpso.fpso_email_5 }}</p>
 
-    
     </div>
-  
-
-  
+    
     <div class="card-body col-12 col-lg-3 ">
         <h4 class="card-title p-3 mb-2 bg-secondary text-white">PRS Fwd</h4>
         <hr>
@@ -90,6 +88,7 @@
         <p class="card-text text-center">{{ fpso.radius_info_fwd }}</p>
         
     </div>
+
     <div class="card-body col-12 col-lg-3">
         <h4 class="card-title p-3 mb-2 bg-secondary text-white">PRS Aft</h4>
         <hr>
@@ -125,8 +124,6 @@
         
     </div>
 
-
-  
     <div class="card-body col-12 col-lg-3">
         <h4 class="card-title p-3 mb-2 bg-secondary text-white">Cargo</h4>
         <hr>
@@ -150,18 +147,50 @@
 
     </div>
   </div>
-  <hr>
+<hr>
 <!-- GENERAL REMARKS -->
+
+       
+
+ <p class="card-text text-start"><b>General Remarks: </b></p>
+ <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Remark</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+
+     {% if remarks %}
+       {% for remark in remarks %}
+        {% if remark.fpso.id==fpso.id %}
+          <tr>
+            <th scope="row">{{remark.timestamp.strftime("%Y-%m-%d")}}</th>
+            <td>{{remark.body}}</td>
+            <td> <a href="{{ url_for('delete_remark', id=remark.id) }}" class="btn btn-outline-danger me-1 mb-1">Delete</a></td>
+          </tr>
+        {%endif%}
+      {% endfor %}       
+    {% endif %}
+  </tbody>
+</table>
+
+
+<hr>
+
+<!--
 <p class="card-text text-start"><b>General Remarks: </b></p>
 <p class="card-text text-start">{{ fpso.fpso_remarks }} </p>
 <hr>
-
+-->
 
 <!-- BUTTONS -->
 
   <div class="row">
     <div class="card-body">
         <a href="{{ url_for('index') }}" class="btn btn-outline-success me-3 mb-3">Close</a>
+        <a href="{{ url_for('add_remark', id=fpso.id) }}" class="btn btn-outline-primary me-3 mb-3">Add Remark</a>
         <a href="{{ url_for('edit_fpso', id=fpso.id) }}" class="btn btn-outline-secondary {{ '' if current_user.is_authenticated else 'disabled'}} me-3 mb-3">Edit</a>
         
         {% if current_user.is_authenticated %}

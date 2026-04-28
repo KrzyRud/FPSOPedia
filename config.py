@@ -9,7 +9,7 @@ class Config(object):
     # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL_1')
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
     
-    SQLALCHEMY_TRACK_MODIFICATOR = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     MAIL_SENDGRID_API_KEY = os.environ.get('MAIL_PASSWORD_1')
 
@@ -24,3 +24,6 @@ class Config(object):
     MAIL_MAX_EMAILS = None
     MAIL_SUPPRESS_SEND = False
     MAIL_ASCII_ATTACHMENTS = False
+
+    # FOLDER FOR SENDING THE FILES
+    FILE_PATH = 'static/downloads'

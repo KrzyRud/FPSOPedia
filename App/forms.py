@@ -133,3 +133,12 @@ class FpsoDetailForm(FlaskForm):
 class SearchForm(FlaskForm):
     search_for = StringField('search for', validators=[DataRequired()])
     submit = SubmitField('Search')
+
+class AddRemarksForm(FlaskForm):
+    body = TextAreaField("Remark", validators=[DataRequired(),Length(min=0, max=40)])
+    submit = SubmitField("Add Remark")
+
+class AddPostsForm(FlaskForm):
+    title = TextAreaField('title',validators=[DataRequired()] )
+    body = TextAreaField('Post', validators=[DataRequired(), Length(min=1, max=140)])
+    submit = SubmitField('Add Post')

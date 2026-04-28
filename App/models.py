@@ -19,6 +19,8 @@ favorite = db.Table('favorite',
     db.Column('fpso_id', db.Integer, db.ForeignKey('fpso.id'))
     )
 
+
+
 # SETTTING UP THE USER MODEL
 class User (db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,6 +33,7 @@ class User (db.Model, UserMixin):
     user_since = db.Column(db.DateTime, default=datetime.utcnow)
     user_last_seen= db.Column(db.DateTime, default=datetime.utcnow)
     favorite = db.relationship('Fpso', secondary=favorite, backref='followers', lazy='dynamic')
+    posts = db.relationship('Post', backref = 'author', lazy='dynamic')
 
     def set_password(self, password):
         self.user_password_hash = generate_password_hash(password)  
@@ -142,6 +145,7 @@ class Fpso(db.Model):
     fanbeam_info_aft = db.Column(db.String, nullable = True)
     radius_info_aft = db.Column(db.String, nullable = True)
 
+    remarks = db.relationship('Remark', backref='fpso', lazy='dynamic')
 
     def get_dens_in_15(self):
         dens_at_15 = self.cargo_dens * 15
@@ -154,3 +158,28 @@ class Fpso(db.Model):
     # Setting up the avatar url
     def avatar(self):
         return "url_for('static', filename='img/{}.jpg').format('default_fpso_card')"
+    
+#"""    
+
+# Remark Model
+
+class Remark(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String, nullable = False)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    fpso_id = db.Column(db.Integer, db.ForeignKey('fpso.id'))
+
+    def __repr__(self):
+        return '<Remark {}>'.format(self.body)
+#"""    
+
+# Post Model
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    blog_Title = db.Column(db.String(20))
+    body = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __repr__(self):
+        return '<Post {}>'.format(self.body)
