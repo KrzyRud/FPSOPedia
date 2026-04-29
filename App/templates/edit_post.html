@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible d-flex align-items-center" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+
+        <div class="container card border-warning col-12 col-md-6 shadow-lg p-3 mb-5 bg-body rounded">
+            <div class="row card-body">
+                <div class="">
+                    <div class="mb-3 card-header text-center text-warning">
+                        <h3>Edit Post</h3>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.title.label(class="form-label") }}
+                        {{ form.title(size=140, class="form-control", placeholder='Title') }}
+                        {% for error in form.title.errors %}
+                            <p style="color:red"><em>{{ error }}</em></p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.body.label(class="form-label") }}
+                        {{ form.body(size=140, class="form-control", placeholder='Post') }}
+                        {% for error in form.body.errors %}
+                            <p style="color:red"><em>{{ error }}</em></p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="m-3 text-center">
+                        <a href="{{ url_for('blog') }}" class="btn btn-success me-2">Cancel</a>
+                        {{ form.submit(class="btn btn-warning") }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

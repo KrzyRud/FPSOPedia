@@ -21,7 +21,12 @@ def index():
         return redirect(url_for('search', fpso = search_for))
     fpso = Fpso.query.order_by(Fpso.fpso_name).all()
     posts = Post.query.order_by(Post.id).all()
-    return render_template('index.html', title="Home", fpsos=fpso, form=form, posts=posts)
+    stats = {
+        'fpso_count': Fpso.query.count(),
+        'user_count': User.query.count(),
+        'post_count': Post.query.count(),
+    }
+    return render_template('index.html', title="Home", fpsos=fpso, form=form, posts=posts, stats=stats)
 
 # SEARCH FOR FPSO
 @app.route('/search/<fpso>', methods=['GET', 'POST'])
@@ -512,20 +517,44 @@ def add_post():
         db.session.add(post)
         db.session.commit()
         flash('Post Added')
-        return redirect(url_for('index'))
+        return redirect(url_for('blog'))
     return render_template('add_post.html', form=form, title='Add Post')
+
+# EDIT Post
+@app.route('/edit_post/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_post(id):
+    post = Post.query.get_or_404(id)
+    if post.author != current_user and current_user.username != 'Admin':
+        flash('You do not have permission to edit this post.')
+        return redirect(url_for('blog'))
+    form = AddPostsForm()
+    if form.validate_on_submit():
+        post.blog_Title = form.title.data
+        post.body = form.body.data
+        db.session.commit()
+        flash('Post updated.')
+        return redirect(url_for('blog'))
+    form.title.data = post.blog_Title
+    form.body.data = post.body
+    return render_template('edit_post.html', form=form, title='Edit Post', post=post)
 
 # DELETE Post
 @app.route('/delete_post/<int:id>')
+@login_required
 def delete_post(id):
     post_to_delete = Post.query.get_or_404(id)
+    if post_to_delete.author != current_user and current_user.username != 'Admin':
+        flash('You do not have permission to delete this post.')
+        return redirect(url_for('blog'))
     try:
         db.session.delete(post_to_delete)
         db.session.commit()
-        return redirect(url_for('index'))
+        flash('Post deleted.')
+        return redirect(url_for('blog'))
     except Exception:
         flash('Something went wrong when deleting the post')
-        return redirect(url_for('index'))
+        return redirect(url_for('blog'))
 
 # BLOG PAGE
 @app.route('/blog')

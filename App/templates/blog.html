@@ -14,7 +14,7 @@
     {% endwith %}
 
     <div class="container">
-        <h4>BLOG</h4>
+        <h4 class="text-warning">POSTS</h4>
         <hr>
 
         {% if posts %}
@@ -35,9 +35,15 @@
                                 </p>
                                 <p class="card-text text-muted"><small>{{ moment(post.timestamp).format('LL') }}</small></p>
                             </div>
-                            {% if current_user.is_authenticated and current_user.username == 'Admin' %}
-                            <div>
-                                <a href="{{ url_for('delete_post', id=post.id) }}" class="btn btn-outline-danger me-1 mb-1">Delete</a>
+                            {% if current_user.is_authenticated and (current_user == post.author or current_user.username == 'Admin') %}
+                            <div class="px-3 pb-2">
+                                <a href="{{ url_for('edit_post', id=post.id) }}" class="btn btn-outline-warning me-1 mb-1">Edit</a>
+                                <button type="button" class="btn btn-outline-danger me-1 mb-1"
+                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    data-delete-url="{{ url_for('delete_post', id=post.id) }}"
+                                    data-post-title="{{ post.blog_Title }}">
+                                    Delete
+                                </button>
                             </div>
                             {% endif %}
                         </div>
@@ -49,7 +55,35 @@
         {% endif %}
 
         <hr>
-        <a href="{{ url_for('index') }}" class="btn btn-outline-success me-3 mb-3">Close</a>
-        <a href="{{ url_for('add_post') }}" class="btn btn-outline-secondary mb-3">Add Post</a>
+        <a href="{{ url_for('index') }}" class="btn btn-success me-3 mb-3">Close</a>
+        <a href="{{ url_for('add_post') }}" class="btn btn-info me-3 mb-3">Add Post</a>
     </div>
+
+    <!-- Delete confirmation modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete the post <strong id="modalPostTitle"></strong>? This action cannot be undone.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a id="confirmDeleteBtn" href="#" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            document.getElementById('modalPostTitle').textContent = '"' + button.dataset.postTitle + '"';
+            document.getElementById('confirmDeleteBtn').href = button.dataset.deleteUrl;
+        });
+    </script>
 {% endblock %}

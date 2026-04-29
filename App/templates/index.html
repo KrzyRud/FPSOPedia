@@ -39,13 +39,29 @@
         </form>
     </div>
 
+    <!-- Stats bar -->
+    <div class="stats-bar d-flex justify-content-center gap-5 py-3 px-4 mb-3 mx-auto" style="max-width:480px;">
+        <div>
+            <div class="stat-value">{{ stats.fpso_count }}</div>
+            <div class="stat-label">FPSOs</div>
+        </div>
+        <div>
+            <div class="stat-value">{{ stats.user_count }}</div>
+            <div class="stat-label">Users</div>
+        </div>
+        <div>
+            <div class="stat-value">{{ stats.post_count }}</div>
+            <div class="stat-label">Posts</div>
+        </div>
+    </div>
+
     <hr>
-    <h4><a href="{{ url_for('blog') }}" class="link-dark link-underline-opacity-0 link-underline-opacity-75-hover">BLOG</a></h4>
+    <h4><a href="{{ url_for('blog') }}" class="link-warning link-underline-opacity-0 link-underline-opacity-75-hover">ALL POSTs</a></h4>
     <hr>
 
 
 
-    <div id="carouselExample" class="carousel slide">
+    <div id="carouselExample" class="carousel carousel-dark slide">
         <div class="carousel-inner">
             {% if posts %}
                 {% for post in posts %}
@@ -66,7 +82,12 @@
                             </div>
                             {% if current_user.is_authenticated and current_user.username == 'Admin' %}
                             <div>
-                                <a href="{{ url_for('delete_post', id=post.id) }}" class="btn btn-outline-danger me-1 mb-1">Delete</a>
+                                <button type="button" class="btn btn-outline-danger me-1 mb-1"
+                                    data-bs-toggle="modal" data-bs-target="#deletePostModal"
+                                    data-delete-url="{{ url_for('delete_post', id=post.id) }}"
+                                    data-post-title="{{ post.blog_Title }}">
+                                    Delete
+                                </button>
                             </div>
                             {% endif %}
                         </div>
@@ -75,18 +96,19 @@
                 {% endfor %}
             {% endif %}
 
-        <div class="carousel-item {% if not posts %}active{% endif %}">
-            <div class="row justify-content-center">
-                <div class="card border-dark mb-3 col-12 col-lg-3 shadow p-3 bg-body rounded">
-                    <div class="card-header ">
-                        <h4>You Can Suppor This Page At BuyCoffee</h4>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <a href="https://buycoffee.to/naviidevelopment" target="_blank"><img src="https://buycoffee.to/static/img/share/share-button-dark.png" style="width: 234px; height: 61px" alt="Buy me a coffee at buycoffee.to"></a>
+            <div class="carousel-item {% if not posts %}active{% endif %}">
+                <div class="row justify-content-center">
+                    <div class="card border-dark mb-3 col-12 col-lg-3 shadow p-3 bg-body rounded">
+                        <div class="card-header">
+                            <h4>You Can Suppor This Page At BuyCoffee</h4>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <a href="https://buycoffee.to/naviidevelopment" target="_blank"><img src="https://buycoffee.to/static/img/share/share-button-dark.png" style="width: 234px; height: 61px" alt="Buy me a coffee at buycoffee.to"></a>
+                        </div>
                     </div>
                 </div>
-            </div>   
+            </div>
         </div>
 
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
@@ -101,8 +123,67 @@
 
     <a href="{{ url_for('add_post') }}" class="btn btn-info me-3 mb-3">Add Post</a>
 
+    <div class="d-flex justify-content-center gap-2 mb-3" id="carouselDots">
+        {% if posts %}
+            {% for post in posts %}
+            <button type="button" class="rounded-circle border-0 {% if loop.first %}bg-dark{% else %}bg-secondary{% endif %}"
+                    style="width:12px;height:12px;opacity:{% if loop.first %}1{% else %}0.4{% endif %};padding:0;"
+                    data-bs-target="#carouselExample" data-bs-slide-to="{{ loop.index0 }}"
+                    aria-label="Slide {{ loop.index }}"></button>
+            {% endfor %}
+            <button type="button" class="rounded-circle border-0 bg-secondary"
+                    style="width:12px;height:12px;opacity:0.4;padding:0;"
+                    data-bs-target="#carouselExample" data-bs-slide-to="{{ posts|length }}"
+                    aria-label="Slide {{ posts|length + 1 }}"></button>
+        {% else %}
+            <button type="button" class="rounded-circle border-0 bg-dark"
+                    style="width:12px;height:12px;opacity:1;padding:0;"
+                    data-bs-target="#carouselExample" data-bs-slide-to="0"
+                    aria-label="Slide 1"></button>
+        {% endif %}
+    </div>
+    <script>
+        document.getElementById('carouselExample').addEventListener('slide.bs.carousel', function(e) {
+            document.querySelectorAll('#carouselDots button').forEach(function(btn, i) {
+                var active = i === e.to;
+                btn.classList.toggle('bg-dark', active);
+                btn.classList.toggle('bg-secondary', !active);
+                btn.style.opacity = active ? '1' : '0.4';
+            });
+        });
+    </script>
+
+    <!-- Delete post confirmation modal (carousel / Admin) -->
+    <div class="modal fade" id="deletePostModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete the post <strong id="indexModalPostTitle"></strong>? This action cannot be undone.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a id="indexConfirmDeleteBtn" href="#" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const indexDeleteModal = document.getElementById('deletePostModal');
+        if (indexDeleteModal) {
+            indexDeleteModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                document.getElementById('indexModalPostTitle').textContent = '"' + button.dataset.postTitle + '"';
+                document.getElementById('indexConfirmDeleteBtn').href = button.dataset.deleteUrl;
+            });
+        }
+    </script>
+
     <hr>
-    <h4> FPSO </h4>
+    <h4 class="text-warning"> FPSO </h4>
     <hr>
 
     <div class="row">

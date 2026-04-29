@@ -1,8 +1,10 @@
 body {
-  background-color: gray;
+  background: linear-gradient(160deg, #0d1b2a 0%, #1a3a5c 50%, #0d2137 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
 }
 
-.main{
+.main {
   min-height: 75vh;
 }
 
@@ -10,16 +12,72 @@ body {
   color: black;
 }
 
-.logo{
-  font-family:cursive;
+.logo {
+  font-family: cursive;
 }
 
-.newVersion{
-  color: red;
+.newVersion {
+  color: #f0a030;
 }
 
-.news{
-  color:green;
+.news {
+  color: #28a745;
 }
 
+/* ── FPSO card hover effect ── */
+.fpso-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
 
+.fpso-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* ── Stats bar ── */
+.stats-bar {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+}
+
+.stats-bar .stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #f0a030;
+  line-height: 1.1;
+}
+
+.stats-bar .stat-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #adb5bd;
+}
+
+/* ── Back-to-top button ── */
+#backToTop {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #f0a030;
+  color: #0d1b2a;
+  border: none;
+  font-size: 1.2rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 1050;
+}
+
+#backToTop:hover {
+  transform: translateY(-3px);
+  background-color: #e0901a;
+}
