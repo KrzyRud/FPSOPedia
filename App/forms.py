@@ -139,5 +139,5 @@ class AddRemarksForm(FlaskForm):
 
 class AddPostsForm(FlaskForm):
     title = TextAreaField('title',validators=[DataRequired()] )
-    body = TextAreaField('Post', validators=[DataRequired(), Length(min=1, max=140)])
+    body = TextAreaField('Post', validators=[DataRequired(), Length(min=1, max=500)])
     submit = SubmitField('Add Post')

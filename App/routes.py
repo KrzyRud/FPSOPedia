@@ -538,14 +538,14 @@ def blog():
 @app.route('/download')
 def download():
     downloads_path = os.path.join(app.root_path, 'static', 'downloads')
-    files = os.listdir(downloads_path) if os.path.isdir(downloads_path) else []
+    files = sorted(os.listdir(downloads_path)) if os.path.isdir(downloads_path) else []
     return render_template('download.html', title="Download", files=files)
 
 
 @app.route('/download_file/<filename>')
 def download_file(filename):
     try:
-        return send_from_directory(directory = app.config['FILE_PATH'], path=filename, as_attachment=True)
+        return send_from_directory(directory=os.path.join(app.root_path, 'static', 'downloads'), path=filename, as_attachment=True)
     except FileNotFoundError:
         abort(404)
 

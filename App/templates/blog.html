@@ -31,7 +31,7 @@
                             </div>
                             <div class="card-body text-dark">
                                 <p class="card-text"><b>Added by:</b>
-                                    <em>{{ post.author.user_name if post.author else 'Unknown' }}</em>
+                                    <em>{{ post.author.username if post.author else 'Unknown' }}</em>
                                 </p>
                                 <p class="card-text text-muted"><small>{{ moment(post.timestamp).format('LL') }}</small></p>
                             </div>
@@ -49,6 +49,7 @@
         {% endif %}
 
         <hr>
+        <a href="{{ url_for('index') }}" class="btn btn-outline-success me-3 mb-3">Close</a>
         <a href="{{ url_for('add_post') }}" class="btn btn-outline-secondary mb-3">Add Post</a>
     </div>
 {% endblock %}

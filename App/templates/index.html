@@ -61,7 +61,7 @@
                             </div>
                             <div class="card-body text-dark">
                                 <p class="card-text"><b>Added by:</b>
-                                    <em>{{ post.author.user_name if post.author else 'Unknown' }}</em>
+                                    <em>{{ post.author.username if post.author else 'Unknown' }}</em>
                                 </p>
                             </div>
                             {% if current_user.is_authenticated and current_user.username == 'Admin' %}
